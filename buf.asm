@@ -1,19 +1,18 @@
-
 section .text
     global _start
 _start:
-    push -145
-    call prt_d_
-    pop rax
-
-    mov rax, 10
-    push rax
-    call putc_
-    pop rax
+    mov rsi, -12
+    push rsi
+    push tstr
+    push fstr
+    call printf_
+    pop rsi
 
     call exit_
 
 %include "asmstd.asm"
+%include "asmprintf.asm"
 
 section .data
-    msg:    db 'boba aboba', 0
+    fstr:   db 's %s:%d\n', 0
+    tstr:   db 'boba\0'    
