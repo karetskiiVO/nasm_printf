@@ -1,16 +1,20 @@
-chunksize equ 8
+section .text
+global printf_
 
+chunksize equ 8
+%include "asmstd.asm"
 ;-------------------------------------------
-; printf_
+; printf
 ;-------------------------------------------
 ;ENTRY:	 	top of stack - format string
 ;           at stack - args in cdecl
 ;EXIT:		NONE
 ;EXPECT:	NONE
-;DESTOYS:	rax, rbx, rdx, rsi
+;DESTOYS:	rax, rbx, rcx, rdx,  rsi
 ;-------------------------------------------
 section .text
 printf_:
+    xor rcx, rcx
     push rbp
     mov rbp, rsp
 
@@ -116,6 +120,7 @@ printf_:
         
         _$formsymb:
             inc rbx
+            inc rcx
 
             cmp byte [rbx], '%'
             jne _$notper
@@ -239,6 +244,8 @@ printf_:
     jmp _$startloop
 
     _$break:
+
+    mov rax, rcx
     pop rbp
     ret
 section .data

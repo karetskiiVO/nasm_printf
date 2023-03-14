@@ -10,7 +10,7 @@ _start:
 
     call exit_
 
-%include "asmstd.asm"
+
 %include "asmprintf.asm"
 
 section .data
