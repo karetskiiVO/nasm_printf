@@ -5,13 +5,14 @@ _start:
     push rsi
     push tstr
     push fstr
-    call printf_
+    call print_
     pop rsi
 
     call exit_
 
 
-%include "asmprintf.asm"
+%include "asmprint.asm"
+%include "asmstd.asm"
 
 section .data
     fstr:   db 's %s:%d\n', 0

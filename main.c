@@ -1,11 +1,11 @@
-//#include "asmprint.h"
+#include "asmprint.h"
 #include <stdio.h>
 
-//extern int __CRTDECL printf_ (_In_z_ _Printf_format_string_ char const* const format, ...);
-extern int printf_ (const char* format, ...);
-
 int main () {
-    printf("%d aboba %s\n", 145, "dodido");
-    printf_("%d aboba %s\n", 145, "dodido");
+    const char* b = "aboba %s\n";
+    printf("%p %d\n", b, print_(0, 0, 0, 0, 0, 0, b, 14, "biba"));
+    //prtf(b, "biba");
+    
+
     return 0;
 }

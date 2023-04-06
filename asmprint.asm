@@ -1,25 +1,26 @@
 section .text
-global printf_
+global print_
+
+;%include "asmstd.asm"
 
 chunksize equ 8
-%include "asmstd.asm"
 ;-------------------------------------------
 ; printf
 ;-------------------------------------------
 ;ENTRY:	 	top of stack - format string
 ;           at stack - args in cdecl
-;EXIT:		NONE
+;EXIT:		rax - number of el-ts
 ;EXPECT:	NONE
-;DESTOYS:	rax, rbx, rcx, rdx,  rsi
+;DESTOYS:	rax, rbx, rcx, rdx, rsi
 ;-------------------------------------------
 section .text
-printf_:
-    xor rcx, rcx
+print_:
     push rbp
     mov rbp, rsp
 
     mov rbx, [rbp + 2 * chunksize]
     mov rdx, 3 * chunksize
+
     _$startloop:
         cmp byte [rbx], 0
         je _$break
@@ -120,7 +121,6 @@ printf_:
         
         _$formsymb:
             inc rbx
-            inc rcx
 
             cmp byte [rbx], '%'
             jne _$notper
@@ -132,6 +132,7 @@ printf_:
                 inc rbx
                 jmp _$startloop
 
+            inc rcx
             _$notper:
                 cmp byte [rbx], 'b'
                 jb _$missymb
@@ -154,7 +155,8 @@ printf_:
                 push rbx
                 push rdx
                 
-                mov rsi, [rbp + rdx]
+                xor rsi, rsi
+                mov esi, [rbp + rdx]
                 push rsi
                 call prt_b_
                 pop rsi
@@ -168,7 +170,8 @@ printf_:
                 push rbx
                 push rdx
                 
-                mov rsi, [rbp + rdx]
+                xor rsi, rsi
+                mov esi, [rbp + rdx]
                 push rsi
                 call prt_d_
                 pop rsi
@@ -182,7 +185,8 @@ printf_:
                 push rbx
                 push rdx
                 
-                mov rsi, [rbp + rdx]
+                xor rsi, rsi
+                mov esi, [rbp + rdx]
                 push rsi
                 call prt_o_
                 pop rsi
@@ -210,7 +214,8 @@ printf_:
                 push rbx
                 push rdx
                 
-                mov rsi, [rbp + rdx]
+                xor rsi, rsi
+                mov esi, [rbp + rdx]
                 push rsi
                 call prt_u_
                 pop rsi
@@ -224,7 +229,8 @@ printf_:
                 push rbx
                 push rdx
                 
-                mov rsi, [rbp + rdx]
+                xor rsi, rsi
+                mov esi, [rbp + rdx]
                 push rsi
                 call prt_x_
                 pop rsi
@@ -245,7 +251,8 @@ printf_:
 
     _$break:
 
-    mov rax, rcx
+    sub rbx, [rbp + 2 * chunksize]
+    mov rax, rbx
     pop rbp
     ret
 section .data
